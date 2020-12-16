@@ -1,0 +1,37 @@
+syntax = "proto3"
+
+package news.comment.appcomment
+
+service AppComment {
+    rpc Submit(SubmitRequest) returns (SubmitResponse) {}
+    rpc Query(QueryRequest) returns (QueryResponse) {}
+}
+
+message SubmitRequest {
+    int64 GroupId = 1
+    int64 UserId = 2
+    string Content = 3
+    string Nickname = 4
+}
+
+message SubmitResponse {
+    int64 Id = 1
+    int64 UserId = 2
+    string Content = 3
+    string Nickname = 4
+}
+
+message QueryRequest {
+    int64 GroupId = 1
+}
+
+message QueryResponse {
+    repeated QueryItem = 1
+}
+
+message QueryItem {
+    int64 Id = 1
+    int64 UserId = 2
+    string Content = 3
+    string Nickname = 4
+}
