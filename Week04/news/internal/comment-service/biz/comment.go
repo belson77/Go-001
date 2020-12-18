@@ -1,36 +1,26 @@
 package biz
 
-import (
-	"github.com/belson77/Go-001/Week04/news/internal/comment-service/data"
-	"github.com/belson77/Go-001/Week04/news/internal/comment-service/service"
-)
-
 // DO
 type Comment struct {
-	Id       int64
-	ObjId    int64
-	ObjType  int64
+	ID       int64
+	ObjID    int64
+	ObjType  int
 	UserName string
 	Content  string
 }
 
 type CommentRepo interface {
-	Submit(*Comment)
+	Add(*Comment) (int64, error)
 }
 
-func NewCommentUsecase(repo *CommentRepo) *CommentUsecase {
-	return &CommentUsecase
+func NewCommentUsecase(repo CommentRepo) *CommentUsecase {
+	return &CommentUsecase{repo}
 }
 
 type CommentUsecase struct {
-	repo *CommentRepo
+	repo CommentRepo
 }
 
-func (c comm) SubmitComment(d *CommentRepo) error {
-	comm := d.(data.CommentRepo)
-	id, err := comm.Add()
-	if err != nil {
-		return err
-	}
-	return nil
+func (cu *CommentUsecase) SubmitComment(c *Comment) (int64, error) {
+	return cu.repo.Add(c)
 }

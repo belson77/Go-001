@@ -2,9 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/belson77/Go-001/Week04/news/internal/comment/biz"
-	"github.com/belson77/Go-001/Week04/news/internal/comment/data"
-	"github.com/belson77/Go-001/Week04/news/internal/comment/service"
+	"github.com/belson77/Go-001/Week04/news/internal/comment-service/service"
 	"golang.org/x/sync/errgroup"
 	"log"
 	"net/http"
@@ -19,8 +17,8 @@ func main() {
 
 	// http server 1
 	g.Go(func() error {
-		http.Handle("/comment/add", service.AddCommentHandler)
-		http.Handle("/comment/query", service.QueryCommentHandler)
+		http.HandleFunc("/comment/add", service.AddCommentHandler)
+		//		http.HandleFunc("/comment/query", service.QueryCommentHandler)
 		srv := http.Server{Addr: ":8080"}
 		go func() {
 			select {

@@ -1,6 +1,11 @@
 github.com/belson77/Go-001 v0.0.0-20201218020600-26f1906e6fdd h1:GFLuQ4lyTbAasfT/g2amgiWangX/X3MIlYpk0eMkp1s=
+github.com/belson77/Go-001 v0.0.0-20201218045832-4c79b527c2ff h1:TtH/+5+oXOjaj0Xq+3hC2pZJ++Pdlv+u7uKNmV9qC2k=
 github.com/belson77/Go-001/Week04/news v0.0.0-20201218020600-26f1906e6fdd h1:/5Ut85SxL2OxHaWoMqd0rNiwvjNAWxrIo7K129VGmzg=
+github.com/go-sql-driver/mysql v1.5.0 h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=
+github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
 github.com/jacksonyoudi/gomodone v1.0.1 h1:jFd+qZlAB0R3zqrC9kwO8IgPrAdayMUS0rSHMDc/uG8=
 github.com/jacksonyoudi/gomodone v1.0.1/go.mod h1:XWi+BLbuiuC2YM8Qz4yQzTSPtHt3T3hrlNN2pNlyA94=
+github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
+github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 golang.org/x/sync v0.0.0-20201207232520-09787c993a3a h1:DcqTD9SDLc+1P/r1EmRBwnVsrOwW+kk2vWf9n+1sGhs=
 golang.org/x/sync v0.0.0-20201207232520-09787c993a3a/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
