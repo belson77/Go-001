@@ -1,4 +1,4 @@
-module news
+module github.com/belson77/Go-001/Week04/news
 
 go 1.14
 
