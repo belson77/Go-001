@@ -1,6 +1,7 @@
 package service
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/belson77/Go-001/Week04/news/internal/comment-service/biz"
 	"github.com/belson77/Go-001/Week04/news/internal/comment-service/data"
@@ -8,12 +9,20 @@ import (
 	"strconv"
 )
 
-func AddCommentHandler(w http.ResponseWriter, r *http.Request) {
+func NewCommentService(db *sql.DB) *CommentService {
+	return &CommentService{db}
+}
+
+type CommentService struct {
+	dao *sql.DB
+}
+
+func (svc *CommentService) AddCommentHandler(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.ParseInt(r.PostFormValue("obj_id"), 10, 64)
 	objType, _ := strconv.Atoi(r.PostFormValue("obj_type"))
 
 	// repo init
-	repo := data.NewCommentRepo()
+	repo := data.NewCommentRepo(svc.dao)
 	cu := biz.NewCommentUsecase(repo)
 
 	commentDo := &biz.Comment{
