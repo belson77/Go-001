@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
+	"github.com/belson77/Go-001/Week04/news/internal/comment/biz"
+	"github.com/belson77/Go-001/Week04/news/internal/comment/data"
+	"github.com/belson77/Go-001/Week04/news/internal/comment/service"
 	"golang.org/x/sync/errgroup"
 	"log"
 	"net/http"
-	"news/internal/comment/biz"
-	"news/internal/comment/data"
-	"news/internal/comment/service"
 	"os"
 	"os/signal"
 	"syscall"
