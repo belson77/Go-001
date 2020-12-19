@@ -7,16 +7,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type MysqlConfig struct {
-	Host     string
-	Username string
-	Password string
-	Dataname string
-}
-
 func NewMysql(cf config.Config) (*sql.DB, error) {
-	dbCf, _ := cf.(MysqlConfig)
-	conn, err := sql.Open("mysql", fmt.Sprint("%s:%s@%s/%s", dbCf.Username, dbCf.Password, dbCf.Host, dbCf.Dataname))
+	conn, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", cf.DB.Username, cf.DB.Password, cf.DB.Host, cf.DB.Dataname))
 	if err != nil {
 		return nil, err
 	}
