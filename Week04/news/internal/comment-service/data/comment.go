@@ -18,9 +18,12 @@ type commentRepo struct {
 
 func (cm *commentRepo) Add(o *biz.Comment) (id int64, err error) {
 	sql := "INSERT INTO `comment`(obj_id,obj_type,user_name,content) VALUE(?,?,?,?)"
-	result, err := cm.db.Exec(sql, o.ObjID, o.ObjType, o.UserName, o.Content)
+	res, err := cm.db.Exec(sql, o.ObjID, o.ObjType, o.UserName, o.Content)
 	if err != nil {
 		err = errors.Wrap(err, sql)
+		return
 	}
-	return result.RowsAffected()
+
+	id, err = res.LastInsertId()
+	return
 }
