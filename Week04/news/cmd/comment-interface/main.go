@@ -2,48 +2,86 @@ package main
 
 import (
 	"context"
+	"flag"
+	"fmt"
+	pb "github.com/belson77/Go-001/Week04/news/api/comment/appcomment/v1"
+	serverhttp "github.com/go-kratos/kratos/v2/server/http"
+	httptransport "github.com/go-kratos/kratos/v2/transport/http"
 	"golang.org/x/sync/errgroup"
+	"google.golang.org/grpc"
 	"log"
-	"net/http"
+	"net"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-var file string = "./config.yaml"
-
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	g := new(errgroup.Group)
 
-	// http server 1
+	// config path
+	conf := flag.String("conf", "", "config file path")
+	flag.Parse()
+
+	confPath := fmt.Sprintf("%s", *conf)
+
+	// gRpc server
 	g.Go(func() error {
-		/*cf, err := config.NewConfig(file)
-		if err != nil {
-			return err
-		}
-		dao, err := database.NewMysql(cf)
+		defer func() {
+			cancel()
+		}()
+
+		// config, db initialize
+		src, err := initializeCommentService(ctx, confPath)
 		if err != nil {
 			return err
 		}
 
-		svc := service.NewCommentService(dao)*/
-		svc, err := initializeCommentService(file)
+		// gRPC server initialize
+		lis, err := net.Listen("tcp", "127.0.0.1:8899")
 		if err != nil {
-			cancel()
 			return err
 		}
-		http.HandleFunc("/comment/add", svc.AddCommentHandler)
-		//		http.HandleFunc("/comment/query", service.QueryCommentHandler)
-		srv := http.Server{Addr: ":8080"}
+		srv := grpc.NewServer()
 		go func() {
 			select {
 			case <-ctx.Done():
-				srv.Shutdown(ctx)
+				fmt.Println("gRPC Server Close")
+				srv.Stop()
+			}
+		}()
+		pb.RegisterAppCommentServer(srv, src)
+		return srv.Serve(lis)
+	})
+
+	// http server
+	g.Go(func() error {
+		defer func() {
+			cancel()
+		}()
+
+		// config, grpc initialize
+		app, err := initializeCommentApp(ctx, confPath)
+		if err != nil {
+			return err
+		}
+
+		// transport
+		httpTransport := httptransport.NewServer()
+
+		// new http server
+		httpServer := serverhttp.NewServer("tcp", ":8081", serverhttp.ServerHandler(httpTransport))
+		go func() {
+			select {
+			case <-ctx.Done():
+				httpServer.Stop(ctx)
 			}
 		}()
 
-		return srv.ListenAndServe()
+		// register http server
+		pb.RegisterAppCommentHTTPServer(httpTransport, app)
+		return httpServer.Start(ctx)
 	})
 
 	// shutdown

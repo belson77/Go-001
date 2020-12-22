@@ -6,22 +6,38 @@
 package main
 
 import (
+	"context"
 	"github.com/belson77/Go-001/Week04/news/config/yaml"
 	"github.com/belson77/Go-001/Week04/news/internal/comment-service/service"
+	service2 "github.com/belson77/Go-001/Week04/news/internal/comment/service"
 	"github.com/belson77/Go-001/Week04/news/internal/pkg/database"
+	"github.com/belson77/Go-001/Week04/news/internal/pkg/grpc"
 )
 
 // Injectors from wire.go:
 
-func initializeCommentService(f string) (*service.CommentService, error) {
+func initializeCommentService(ctx context.Context, f string) (*service.CommentService, error) {
 	config, err := yaml.NewConfig(f)
 	if err != nil {
 		return nil, err
 	}
-	db, err := database.NewMysql(config)
+	db, err := database.NewMysql(ctx, config)
 	if err != nil {
 		return nil, err
 	}
 	commentService := service.NewCommentService(db)
 	return commentService, nil
+}
+
+func initializeCommentApp(ctx context.Context, f string) (*service2.AppCommentServer, error) {
+	config, err := yaml.NewConfig(f)
+	if err != nil {
+		return nil, err
+	}
+	clientConn, err := grpc.NewClient(ctx, config)
+	if err != nil {
+		return nil, err
+	}
+	appCommentServer := service2.NewAppCommentServer(clientConn)
+	return appCommentServer, nil
 }

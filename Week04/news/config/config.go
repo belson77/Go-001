@@ -1,7 +1,8 @@
 package config
 
 type Config struct {
-	DB DBConfig
+	DB  DBConfig
+	RPC RPCConfig
 }
 
 type DBConfig struct {
@@ -9,4 +10,8 @@ type DBConfig struct {
 	Username string
 	Password string
 	Dataname string
+}
+
+type RPCConfig struct {
+	Address string
 }
